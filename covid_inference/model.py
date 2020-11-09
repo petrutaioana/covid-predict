@@ -12,15 +12,15 @@ def main():
     dataset = data_processor.read_file(file)
 
     # Clean data
-    data_cleaner.clean(dataset)
+    data_cleaner.clean_all_data(dataset)
 
-    # training_dataset, validation_dataset, testing_dataset = \
-    #     data_processor.split_dataset(dataset)
-    #
-    # train(training_dataset, validation_dataset)
-    # inference = infer(testing_dataset.getFeatures())
-    #
-    # evaluation = model_evaluator.evaluate(inference, testing_dataset.getResults())
+    training_dataset, validation_dataset, testing_dataset = \
+        data_processor.split_dataset(dataset)
+
+    train(training_dataset, validation_dataset)
+    inference = infer(testing_dataset.getFeatures())
+
+    evaluation = model_evaluator.evaluate(inference, testing_dataset.getResults())
 
 
 def train(training_dataset, validation_dataset):
