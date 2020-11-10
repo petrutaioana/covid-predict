@@ -1,16 +1,24 @@
-def clean_results(result):
-    # Print unique result values
-    # Results: ['NEGATIV' 'NECONCLUDENT' nan 'POZITIV' 'NEGATIB']
-    result['rezultat testare'] = result['rezultat testare'].replace(['NEGATIB'], 'NEGATIV')
+import pandas as pd
 
-    # Remove items without a conclusive result
-    result = result.dropna(subset=['rezultat testare'])
-    result = result.drop(result[(result['rezultat testare'] == 'NECONCLUDENT')].index)
-    return result
+
+def clean_for_training(df):
+    cleaned_features = clean_features(df.getFeatures())
+    df.setFeatures(
+        features=cleaned_features
+    )
+
+    cleaned_results = clean_results(df.getResults())
+    # Convert back to the type returned by <code>train_test_split</code>
+    converted_cleaned_results = cleaned_results['rezultat testare'].convert_dtypes()
+    df.setResults(
+        results=converted_cleaned_results
+    )
+
+    return df
 
 
 def clean_features(df):
-    # Remove the irrelevant columns
+    # Remove irrelevant columns
     df = df.drop('instituția sursă', 1)
     df = df.drop('dată debut simptome declarate', 1)
     df = df.drop('dată internare', 1)
@@ -20,7 +28,7 @@ def clean_features(df):
     df = df.drop('confirmare contact cu o persoană infectată', 1)
     df = df.drop('data rezultat testare', 1)
 
-    # Cleaning sex column
+    # Clean sex column
     df = df.dropna(subset=['sex'])
     df['sex'] = df['sex'].str.replace(r'^M.*$', 'MASCULIN')
     df['sex'] = df['sex'].str.replace(r'^m.*$', 'MASCULIN')
@@ -53,6 +61,20 @@ def clean_features(df):
 
     # Save to a new file
     df.to_excel("./data/new_data_set.xlsx")
+
+    return df
+
+
+def clean_results(results):
+    # Print unique result values: ['NEGATIV' 'NECONCLUDENT' nan 'POZITIV' 'NEGATIB']
+
+    df = pd.DataFrame(results)
+    df['rezultat testare'] = df['rezultat testare'].replace(['NEGATIB'], 'NEGATIV')
+
+    # Remove items without a conclusive result
+    df = df.dropna(subset=['rezultat testare'])
+    df = df.drop(df[(df['rezultat testare'] == 'NECONCLUDENT')].index)
+
     return df
 
 

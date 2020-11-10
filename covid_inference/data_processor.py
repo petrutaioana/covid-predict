@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split
 import constants
 
 
-class Dataset:
+class DataSet:
     def __init__(self, features, results):
         self.__features = features
         self.__results = results
@@ -21,26 +21,22 @@ class Dataset:
         self.__results = results
 
 
-
 def read_file(file):
     return pandas.read_excel(file)
 
 
-def split_dataset(dataset):
-    results = dataset[constants.LABEL_COLUMN_NAME]
-    features = dataset.drop(constants.LABEL_COLUMN_NAME, axis='columns')
+def split_ds(ds):
+    results = ds[constants.LABEL_COLUMN_NAME]
+    features = ds.drop(constants.LABEL_COLUMN_NAME, axis='columns')
 
-    training_dataset_features, testing_dataset_features, \
-        training_dataset_results, testing_dataset_results = \
+    training_ds_features, testing_ds_features, training_ds_results, testing_ds_results = \
         train_test_split(features, results, train_size=0.9, random_state=0)
 
-    training_dataset_features, validation_dataset_features, \
-        training_dataset_results, validation_dataset_results = \
-        train_test_split(training_dataset_features, training_dataset_results,
-                         train_size=0.9, random_state=0)
+    training_ds_features, validation_ds_features, training_ds_results, validation_ds = \
+        train_test_split(training_ds_features, training_ds_results, train_size=0.9, random_state=0)
 
-    training_dataset = Dataset(training_dataset_features, training_dataset_results)
-    validation_dataset = Dataset(validation_dataset_features, validation_dataset_results)
-    testing_dataset = Dataset(testing_dataset_features, testing_dataset_results)
+    training_ds = DataSet(training_ds_features, training_ds_results)
+    validation_ds = DataSet(validation_ds_features, validation_ds)
+    testing_ds = DataSet(testing_ds_features, testing_ds_results)
 
-    return training_dataset, validation_dataset, testing_dataset
+    return training_ds, validation_ds, testing_ds
