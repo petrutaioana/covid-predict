@@ -1,3 +1,0 @@
-Number of negative people is 5228
-Number of positive people is 622
-Number of inconclusive people is 110
