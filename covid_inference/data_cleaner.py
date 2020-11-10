@@ -1,4 +1,15 @@
-def clean_all_data(df):
+def clean_results(result):
+    # Print unique result values
+    # Results: ['NEGATIV' 'NECONCLUDENT' nan 'POZITIV' 'NEGATIB']
+    result['rezultat testare'] = result['rezultat testare'].replace(['NEGATIB'], 'NEGATIV')
+
+    # Remove items without a conclusive result
+    result = result.dropna(subset=['rezultat testare'])
+    result = result.drop(result[(result['rezultat testare'] == 'NECONCLUDENT')].index)
+    return result
+
+
+def clean_features(df):
     # Remove the irrelevant columns
     df = df.drop('instituția sursă', 1)
     df = df.drop('dată debut simptome declarate', 1)
@@ -8,14 +19,6 @@ def clean_all_data(df):
     df = df.drop('mijloace de transport folosite', 1)
     df = df.drop('confirmare contact cu o persoană infectată', 1)
     df = df.drop('data rezultat testare', 1)
-
-    # Print unique result values
-    # Results: ['NEGATIV' 'NECONCLUDENT' nan 'POZITIV' 'NEGATIB']
-    df['rezultat testare'] = df['rezultat testare'].replace(['NEGATIB'], 'NEGATIV')
-
-    # Remove items without a conclusive result
-    df = df.dropna(subset=['rezultat testare'])
-    df = df.drop(df[(df['rezultat testare'] == 'NECONCLUDENT')].index)
 
     # Cleaning sex column
     df = df.dropna(subset=['sex'])
@@ -50,6 +53,7 @@ def clean_all_data(df):
 
     # Save to a new file
     df.to_excel("./data/new_data_set.xlsx")
+    return df
 
 
 """

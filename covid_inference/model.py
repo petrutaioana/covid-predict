@@ -11,21 +11,28 @@ def main():
 
     dataset = data_processor.read_file(file)
 
-    # Clean data
-    data_cleaner.clean_all_data(dataset)
-
     training_dataset, validation_dataset, testing_dataset = \
         data_processor.split_dataset(dataset)
 
     train(training_dataset, validation_dataset)
+
     inference = infer(testing_dataset.getFeatures())
 
     evaluation = model_evaluator.evaluate(inference, testing_dataset.getResults())
 
 
 def train(training_dataset, validation_dataset):
-    # training_dataset = data_cleaner.clean(training_dataset)
-    # validation_dataset = data_cleaner.clean(validation_dataset)
+    cleaned_features_training = data_cleaner.clean_features(training_dataset.getFeatures())
+    training_dataset.setFeatures(cleaned_features_training)
+
+    cleaned_features_validation = data_cleaner.clean_features(validation_dataset.getFeatures())
+    validation_dataset.setFeatures(cleaned_features_validation)
+
+    # cleaned_results_training = data_cleaner.clean_results(training_dataset.getResults())
+    # training_dataset.setResults(cleaned_results_training)
+    #
+    # cleaned_results_validation = data_cleaner.clean_results(validation_dataset.getResults())
+    # validation_dataset.setResults(cleaned_results_validation)
 
     training_dataset = data_encoder.encode(training_dataset)
     validation_dataset = data_encoder.encode(validation_dataset)

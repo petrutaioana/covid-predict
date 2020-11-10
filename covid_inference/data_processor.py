@@ -14,6 +14,13 @@ class Dataset:
     def getResults(self):
         return self.__results
 
+    def setFeatures(self, features):
+        self.__features = features
+
+    def setResults(self, results):
+        self.__results = results
+
+
 
 def read_file(file):
     return pandas.read_excel(file)
