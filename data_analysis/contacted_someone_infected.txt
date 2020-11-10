@@ -1,0 +1,2 @@
+53 people came in contact with someone infected.
+1263 people did not come in contact with someone infected.
