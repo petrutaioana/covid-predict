@@ -2,10 +2,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.neighbors import KNeighborsClassifier
 
 
-model = ''
-
-
-def train(training_ds, algorithm):
+def train(training_ds, validation_ds, algorithm):
     if algorithm == 1:
         model = DecisionTreeClassifier(random_state=0)
     elif algorithm == 2:
@@ -13,8 +10,10 @@ def train(training_ds, algorithm):
 
     model.fit(training_ds.getFeatures(), training_ds.getResults())
 
-
-def predict(features):
-    prediction = model.predict(features)
+    prediction = model.predict(validation_ds.getFeatures())
 
     return prediction
+
+
+def predict(features):
+    pass

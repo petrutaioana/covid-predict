@@ -1,17 +1,21 @@
 import pandas as pd
 
 
+deleted_rows = []
+
 def clean_for_training(df):
     cleaned_features = clean_features(df.getFeatures())
     df.setFeatures(
         features=cleaned_features
     )
 
-    cleaned_results = clean_results(df.getResults())
+    cleaned_features_indexes = cleaned_features.index
+
+    cleaned_results = clean_results(df.getResults(), cleaned_features_indexes)
     # Convert back to the type returned by <code>train_test_split</code>
-    converted_cleaned_results = cleaned_results['rezultat testare'].convert_dtypes()
+    # converted_cleaned_results = cleaned_results['rezultat testare'].convert_dtypes()
     df.setResults(
-        results=converted_cleaned_results
+        results=cleaned_results
     )
 
     return df
@@ -65,15 +69,34 @@ def clean_features(df):
     return df
 
 
-def clean_results(results):
+def clean_results(results, cleaned_features_indexes):
     # Print unique result values: ['NEGATIV' 'NECONCLUDENT' nan 'POZITIV' 'NEGATIB']
 
     df = pd.DataFrame(results)
+
+    to_delete = []
+
+    print(df)
+
+    for i in range(0, len(df.index)):
+        #print(df.index[i])
+        found = False
+        for j in cleaned_features_indexes:
+            if df.index[i] == j:
+                found = True
+        if found == False:
+            print(i)
+            to_delete.append(i)
+            #df = df.drop(df.index[i])
+
+    rows = df.index[to_delete]
+    df.drop(rows, inplace=True)
+
     df['rezultat testare'] = df['rezultat testare'].replace(['NEGATIB'], 'NEGATIV')
 
     # Remove items without a conclusive result
-    df = df.dropna(subset=['rezultat testare'])
-    df = df.drop(df[(df['rezultat testare'] == 'NECONCLUDENT')].index)
+    # df = df.dropna(subset=['rezultat testare'])
+    # df = df.drop(df[(df['rezultat testare'] == 'NECONCLUDENT')].index)
 
     return df
 
