@@ -1,7 +1,7 @@
 import pandas as pd
 
-
 deleted_rows = []
+
 
 def clean_for_training(df):
     cleaned_features = clean_features(df.getFeatures())
@@ -76,18 +76,15 @@ def clean_results(results, cleaned_features_indexes):
 
     to_delete = []
 
-    print(df)
+    #print(df)
 
     for i in range(0, len(df.index)):
-        #print(df.index[i])
         found = False
         for j in cleaned_features_indexes:
             if df.index[i] == j:
                 found = True
-        if found == False:
-            print(i)
+        if not found:
             to_delete.append(i)
-            #df = df.drop(df.index[i])
 
     rows = df.index[to_delete]
     df.drop(rows, inplace=True)

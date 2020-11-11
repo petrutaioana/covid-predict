@@ -15,5 +15,5 @@ def train(training_ds, validation_ds, algorithm):
     return prediction
 
 
-def predict(features):
-    pass
+# def predict(features):
+#     pass
