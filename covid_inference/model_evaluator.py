@@ -1,2 +1,5 @@
+from sklearn.metrics import accuracy_score
+
+
 def evaluate(inference, results):
-    pass
+    return accuracy_score(results, inference)

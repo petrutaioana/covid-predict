@@ -26,7 +26,7 @@ def train(training_dataset, validation_dataset):
     training_dataset = data_encoder.encode(training_dataset)
     validation_dataset = data_encoder.encode(validation_dataset)
 
-    model_trainer.train(training_dataset)
+    model_trainer.train(training_dataset, 1)
     inference = model_trainer.predict(validation_dataset.getFeatures())
 
     evaluation = model_evaluator.evaluate(inference, validation_dataset.getResults())
