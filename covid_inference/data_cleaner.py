@@ -1,98 +1,131 @@
 import pandas as pd
 
+import constants as c
 
-def clean_for_training(df):
-    cleaned_features = clean_features(df.getFeatures())
-    df.setFeatures(
-        features=cleaned_features
-    )
 
-    cleaned_results = clean_results(df.getResults())
-    # Convert back to the type returned by <code>train_test_split</code>
-    converted_cleaned_results = cleaned_results['rezultat testare'].convert_dtypes()
-    df.setResults(
-        results=converted_cleaned_results
-    )
+def clean(df, for_training):
+    if not for_training:
+        cleaned_features = clean_features(df.getFeatures())
+        df.setFeatures(cleaned_features)
 
+        cleaned_results = clean_results(df.getResults())
+        df.setResults(cleaned_results)
+    else:
+        cleaned_features = clean_features_training(df.getFeatures())
+        df.setFeatures(cleaned_features)
+
+        cleaned_results = clean_results_training(df.getResults())
+        df.setResults(cleaned_results)
     return df
 
 
 def clean_features(df):
-    # Remove irrelevant columns
-    df = df.drop('instituția sursă', 1)
-    df = df.drop('dată debut simptome declarate', 1)
-    df = df.drop('dată internare', 1)
-    df = df.drop('diagnostic și semne de internare', 1)
-    df = df.drop('istoric de călătorie', 1)
-    df = df.drop('mijloace de transport folosite', 1)
-    df = df.drop('confirmare contact cu o persoană infectată', 1)
-    df = df.drop('data rezultat testare', 1)
+    # Fill null values with "NO GENDER".
+    df[c.FEATURE_SEX_COLUMN_NAME] = df[c.FEATURE_SEX_COLUMN_NAME].fillna(c.NO_GENDER_VALUE)
+    clean_sex_column(df)
 
-    # Clean sex column
-    df = df.dropna(subset=['sex'])
-    df['sex'] = df['sex'].str.replace(r'^M.*$', 'MASCULIN')
-    df['sex'] = df['sex'].str.replace(r'^m.*$', 'MASCULIN')
-    df['sex'] = df['sex'].str.replace(r'^F.*$', 'FEMININ')
-    df['sex'] = df['sex'].str.replace(r'^f.*$', 'FEMININ')
+    # Values: Z, X, y, z
+    df[c.FEATURE_INSTITUT_COLUMN_NAME] = df[c.FEATURE_INSTITUT_COLUMN_NAME].fillna(0)
+    df[c.FEATURE_DATA_DEBUT_COLUMN_NAME] = df[c.FEATURE_DATA_DEBUT_COLUMN_NAME].fillna(0)
+    df[c.FEATURE_DATA_INTERNARE_COLUMN_NAME] = df[c.FEATURE_DATA_INTERNARE_COLUMN_NAME].fillna(0)
+    df[c.FEATURE_DIAGNOSTIC_INTERNARE_COLUMN_NAME] = df[c.FEATURE_DIAGNOSTIC_INTERNARE_COLUMN_NAME].fillna(0)
+    df[c.FEATURE_ISTORIC_CALATORIE_COLUMN_NAME] = df[c.FEATURE_ISTORIC_CALATORIE_COLUMN_NAME].fillna(0)
+    df[c.FEATURE_TRANSPORT_COLUMN_NAME] = df[c.FEATURE_TRANSPORT_COLUMN_NAME].fillna(0)
+    df[c.FEATURE_CONTACT_PERS_INFECTATA_COLUMN_NAME] = df[c.FEATURE_CONTACT_PERS_INFECTATA_COLUMN_NAME].fillna(0)
+    df[c.FEATURE_DATA_REZULTAT_COLUMN_NAME] = df[c.FEATURE_DATA_REZULTAT_COLUMN_NAME].fillna(0)
 
-    df = df.dropna(subset=['simptome declarate', 'simptome raportate la internare'])
-
-    # Replace all the "Asimptomatic" variants to "ASIMPTOMATIC"
-    df['simptome declarate'] = df['simptome declarate'].str.replace(r'^ASI.*$', 'ASIMPTOMATIC')
-    df['simptome declarate'] = df['simptome declarate'].str.replace(r'^asi.*$', 'ASIMPTOMATIC')
-    df['simptome declarate'] = df['simptome declarate'].str.replace(r'^Asi.*$', 'ASIMPTOMATIC')
-    df['simptome raportate la internare'] = df['simptome raportate la internare'].str.replace(r'^ASI.*$',
-                                                                                              'ASIMPTOMATIC')
-    df['simptome raportate la internare'] = df['simptome raportate la internare'].str.replace(r'^asi.*$',
-                                                                                              'ASIMPTOMATIC')
-    df['simptome raportate la internare'] = df['simptome raportate la internare'].str.replace(r'^Asi.*$',
-                                                                                              'ASIMPTOMATIC')
-
-    # Remove all number values
-    df['simptome declarate'] = df['simptome declarate'].str.replace(r'\d+\,\d+', '')
-    df['simptome declarate'] = df['simptome declarate'].str.replace(r'\d+\.\d+', '')
-    df['simptome raportate la internare'] = df['simptome raportate la internare'].str.replace(r'\d+\,\d+', '')
-    df['simptome raportate la internare'] = df['simptome raportate la internare'].str.replace(r'\d+\.\d+', '')
-
-    # Split the symptoms string by comma and remove heading white spaces
-    df['simptome declarate'] = df['simptome declarate'].astype(str).apply(lambda x: x.lstrip(' ').split(','))
-    df['simptome raportate la internare'] = df['simptome raportate la internare'].astype(str).apply(
-        lambda x: x.lstrip(' ').split(','))
-
-    # Save to a new file
-    df.to_excel("./data/new_data_set.xlsx")
+    clean_symptoms_columns(df)
 
     return df
 
 
 def clean_results(results):
-    # Print unique result values: ['NEGATIV' 'NECONCLUDENT' nan 'POZITIV' 'NEGATIB']
-
     df = pd.DataFrame(results)
-    df['rezultat testare'] = df['rezultat testare'].replace(['NEGATIB'], 'NEGATIV')
-
-    # Remove items without a conclusive result
-    df = df.dropna(subset=['rezultat testare'])
-    df = df.drop(df[(df['rezultat testare'] == 'NECONCLUDENT')].index)
+    df[c.LABEL_COLUMN_NAME] = df[c.LABEL_COLUMN_NAME].fillna(c.NO_RESULT)
+    clean_results_column(df)
 
     return df
 
 
 """
-Functions used for generating data reports
+Training function drop observations/features
 """
 
 
-def compute_unique_values_number(data_frame):
-    print(data_frame.nunique())
+def clean_features_training(df):
+    # Remove irrelevant columns.
+    df = df.drop(c.FEATURE_INSTITUT_COLUMN_NAME, 1)
+    df = df.drop(c.FEATURE_DATA_DEBUT_COLUMN_NAME, 1)
+    df = df.drop(c.FEATURE_DATA_INTERNARE_COLUMN_NAME, 1)
+    df = df.drop(c.FEATURE_DIAGNOSTIC_INTERNARE_COLUMN_NAME, 1)
+    df = df.drop(c.FEATURE_ISTORIC_CALATORIE_COLUMN_NAME, 1)
+    df = df.drop(c.FEATURE_TRANSPORT_COLUMN_NAME, 1)
+    df = df.drop(c.FEATURE_CONTACT_PERS_INFECTATA_COLUMN_NAME, 1)
+    df = df.drop(c.FEATURE_DATA_REZULTAT_COLUMN_NAME, 1)
+
+    # Remove observations that have null values for gender.
+    df = df.dropna(subset=[c.FEATURE_SEX_COLUMN_NAME])
+    clean_sex_column(df)
+
+    # Remove observations that have null values for symptoms.
+    df = df.dropna(subset=[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME, c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME])
+    clean_symptoms_columns(df)
+
+    # Save to a new file.
+    df.to_excel("./data/data_set_training.xlsx")
+
+    return df
 
 
-def compute_unique_values_percentage(data_frame):
-    counts = data_frame.nunique()
-    (rows, cols) = data_frame.shape
+def clean_results_training(results):
+    # Print unique result values: ['NEGATIV' 'NECONCLUDENT' nan 'POZITIV' 'NEGATIB'].
 
-    print('[Nume coloana] [Valori unice in obs] [Procent raportat la nr. linii]\n')
-    for i in range(cols):
-        percentage = float(counts[i]) / rows * 100
-        if percentage < 1:
-            print('%s: %d, %.1f%%' % (counts.index[i], counts[i], percentage))
+    df = pd.DataFrame(results)
+    clean_results_column(df)
+
+    # Remove items without a conclusive result.
+    df = df.dropna(subset=[c.LABEL_COLUMN_NAME])
+    df = df.drop(df[(df[c.LABEL_COLUMN_NAME] == c.NO_RESULT)].index)
+
+    return df
+
+
+def clean_sex_column(df):
+    df[c.FEATURE_SEX_COLUMN_NAME] = df[c.FEATURE_SEX_COLUMN_NAME].str.replace(r'^M.*$', c.SEX_MASCULIN_VALUE)
+    df[c.FEATURE_SEX_COLUMN_NAME] = df[c.FEATURE_SEX_COLUMN_NAME].str.replace(r'^m.*$', c.SEX_MASCULIN_VALUE)
+    df[c.FEATURE_SEX_COLUMN_NAME] = df[c.FEATURE_SEX_COLUMN_NAME].str.replace(r'^F.*$', c.SEX_FEMININ_VALUE)
+    df[c.FEATURE_SEX_COLUMN_NAME] = df[c.FEATURE_SEX_COLUMN_NAME].str.replace(r'^f.*$', c.SEX_FEMININ_VALUE)
+
+
+def clean_symptoms_columns(df):
+    # Replace all the "Asimptomatic" variants to "ASIMPTOMATIC".
+    df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME].str.replace(r'^ASI.*$',
+                                                                                                            c.ASIMPTOMATIC_VALUE)
+    df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME].str.replace(r'^asi.*$',
+                                                                                                            c.ASIMPTOMATIC_VALUE)
+    df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME].str.replace(r'^Asi.*$',
+                                                                                                            c.ASIMPTOMATIC_VALUE)
+
+    df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME].str.replace(r'^ASI.*$',
+                                                                                                            c.ASIMPTOMATIC_VALUE)
+    df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME].str.replace(r'^asi.*$',
+                                                                                                            c.ASIMPTOMATIC_VALUE)
+    df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME].str.replace(r'^Asi.*$',
+                                                                                                            c.ASIMPTOMATIC_VALUE)
+
+    # Remove all number values.
+    df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME].str.replace(r'\d+\,\d+', '')
+    df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME].str.replace(r'\d+\.\d+', '')
+
+    df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME].str.replace(r'\d+\,\d+', '')
+    df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME].str.replace(r'\d+\.\d+', '')
+
+    # Split the symptoms string by comma and remove heading white spaces.
+    df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME].astype(str).apply(
+        lambda x: x.lstrip(' ').split(','))
+    df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME].astype(str).apply(
+        lambda x: x.lstrip(' ').split(','))
+
+
+def clean_results_column(df):
+    df[c.LABEL_COLUMN_NAME] = df[c.LABEL_COLUMN_NAME].replace(['NEGATIB'], 'NEGATIV')

@@ -42,3 +42,4 @@ The variance can be used as a filter for identifying columns to removed from the
 
 ### Disclaimer 
 * All the info will be edited, right now it's just a information dump file.
+* This file will contain only the algorithms/methods used for constructing the final model.
