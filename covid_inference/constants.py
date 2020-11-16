@@ -1,1 +1,22 @@
 LABEL_COLUMN_NAME = 'rezultat testare'
+
+FEATURE_INSTITUT_COLUMN_NAME = 'instituția sursă'
+FEATURE_DATA_DEBUT_COLUMN_NAME = 'dată debut simptome declarate'
+FEATURE_DATA_INTERNARE_COLUMN_NAME = 'dată internare'
+FEATURE_DIAGNOSTIC_INTERNARE_COLUMN_NAME = 'diagnostic și semne de internare'
+FEATURE_ISTORIC_CALATORIE_COLUMN_NAME = 'istoric de călătorie'
+FEATURE_TRANSPORT_COLUMN_NAME = 'mijloace de transport folosite'
+FEATURE_CONTACT_PERS_INFECTATA_COLUMN_NAME = 'confirmare contact cu o persoană infectată'
+FEATURE_DATA_REZULTAT_COLUMN_NAME = 'data rezultat testare'
+FEATURE_SEX_COLUMN_NAME = 'sex'
+
+SEX_MASCULIN_VALUE = 'MASCULIN'
+SEX_FEMININ_VALUE = 'FEMININ'
+NO_GENDER_VALUE = 'NO GENDER'
+
+FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME = 'simptome declarate'
+FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME = 'simptome raportate la internare'
+
+ASIMPTOMATIC_VALUE = 'ASIMPTOMATIC'
+
+NO_RESULT = 'NECONCLUDENT'

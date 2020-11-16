@@ -1,0 +1,8 @@
+[Nume coloana] [Valori unice in obs] [Procent raportat la nr. linii]
+
+instituția sursă: 4, 0.1%
+sex: 5, 0.1%
+istoric de călătorie: 45, 0.7%
+mijloace de transport folosite: 32, 0.5%
+confirmare contact cu o persoană infectată: 42, 0.7%
+rezultat testare: 4, 0.1%

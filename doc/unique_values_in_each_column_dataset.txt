@@ -1,0 +1,14 @@
+instituția sursă                                 4
+sex                                              5
+vârstă                                         166
+dată debut simptome declarate                  174
+simptome declarate                             646
+dată internare                                 164
+simptome raportate la internare                568
+diagnostic și semne de internare              1153
+istoric de călătorie                            45
+mijloace de transport folosite                  32
+confirmare contact cu o persoană infectată      42
+data rezultat testare                           83
+rezultat testare                                 4
+dtype: int64
