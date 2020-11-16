@@ -14,7 +14,9 @@ def clean(df, for_training):
         cleaned_features = clean_features_training(df.getFeatures())
         df.setFeatures(cleaned_features)
 
-        cleaned_results = clean_results_training(df.getResults())
+        cleaned_features_indexes = cleaned_features.index
+
+        cleaned_results = clean_results_training(df.getResults(), cleaned_features_indexes, cleaned_features)
         df.setResults(cleaned_results)
     return df
 
@@ -77,15 +79,43 @@ def clean_features_training(df):
     return df
 
 
-def clean_results_training(results):
+def clean_results_training(results, cleaned_features_indexes, features):
     # Print unique result values: ['NEGATIV' 'NECONCLUDENT' nan 'POZITIV' 'NEGATIB'].
 
     df = pd.DataFrame(results)
+    to_delete = []
+
+    # Reach the same number of observations in results after dropping lines from features
+    for i in range(0, len(df.index)):
+        found = False
+        for j in cleaned_features_indexes:
+            if df.index[i] == j:
+                found = True
+        if not found:
+            to_delete.append(i)
+
+    rows = df.index[to_delete]
+    df.drop(rows, inplace=True)
+
     clean_results_column(df)
 
     # Remove items without a conclusive result.
     df = df.dropna(subset=[c.LABEL_COLUMN_NAME])
     df = df.drop(df[(df[c.LABEL_COLUMN_NAME] == c.NO_RESULT)].index)
+
+    # Remove these observations from the features.
+    to_delete = []
+    cleaned_results_indexes = df.index
+    for i in range(0, len(features.index)):
+        found = False
+        for j in cleaned_results_indexes:
+            if features.index[i] == j:
+                found = True
+        if not found:
+            to_delete.append(i)
+
+    rows = features.index[to_delete]
+    features.drop(rows, inplace=True)
 
     return df
 
