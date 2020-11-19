@@ -2,21 +2,19 @@ from numpy import array
 from numpy import argmax
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import OneHotEncoder
+import data_processor
 
 def encode(dataset):
-    values = array(dataset)
-    label_encoder = LabelEncoder()
-    integer_encoded = label_encoder.fit_transform(values)
-    print(integer_encoded)
-    # one hot encoding
-    onehot_encoder = OneHotEncoder(sparse=False)
-    integer_encoded = integer_encoded.reshape(len(integer_encoded), 1)
-    onehot_encoded = onehot_encoder.fit_transform(integer_encoded)
-    print(onehot_encoded)
-    # invert
-    # inverted = label_encoder.inverse_transform([argmax(onehot_encoded[0, :])])
-    # print(inverted)
-    return onehot_encoded
+    features = dataset.getFeatures()
+    results = dataset.getResults()
+
+    le = LabelEncoder()
+    
+    encodedFeatures = features.apply(lambda col: le.fit_transform(col.astype(str)), axis=0, result_type='expand')
+    encodedResults = results.apply(lambda col: le.fit_transform(col.astype(str)), axis=0, result_type='expand')
+
+    return data_processor.DataSet(encodedFeatures, encodedResults)
+
 
 def clean_symptoms_column(data_frame):
     i = 0
