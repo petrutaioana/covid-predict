@@ -23,9 +23,11 @@ def train(training_ds, validation_ds):
     training_ds = data_encoder.encode(training_ds)
     validation_ds = data_encoder.encode(validation_ds)
 
-    inference = model_trainer.train_and_predict(training_ds, validation_ds, 1)
+    inference = model_trainer.train_and_predict(training_ds, validation_ds, 2)
 
     evaluation = model_evaluator.evaluate(inference, validation_ds.getResults())
+    print(validation_ds.getResults())
+    print(inference)
     print(evaluation)
 
 
