@@ -14,7 +14,7 @@ import data_processor
 #     #integer_encoded = label_encoder.fit_transform(dataset.getFeatures().values.flatten())
 #     #print(integer_encoded)
 #     # one hot encoding
-    
+
 #     onehot_encoder = OneHotEncoder()
 #     #integer_encoded = integer_encoded.reshape(len(integer_encoded), 1)
 
@@ -41,12 +41,9 @@ def encode(dataset):
     results = dataset.getResults()
 
     le = LabelEncoder()
-    
+
     encodedFeatures = features.apply(lambda col: le.fit_transform(col.astype(str)), axis=0, result_type='expand')
     encodedResults = results.apply(lambda col: le.fit_transform(col.astype(str)), axis=0, result_type='expand')
-    
-    # print(encodedFeatures)
-    # print(encodedResults)
 
     return data_processor.DataSet(encodedFeatures, encodedResults)
 
