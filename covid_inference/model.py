@@ -44,8 +44,11 @@ def test(testing_ds):
     print(evaluation_testing)
 
 
-def infer(features):
-    pass
+def infer():
+    file = sys.argv[1]
+
+    ds = data_processor.read_file(file)
+    test(ds)
 
 
 if __name__ == '__main__':
