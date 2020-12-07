@@ -16,21 +16,42 @@ pycodestyle covid_inference
 ## Statistics
 To be able to perform a proper cleaning of the data set received as input, we have
 analyzed from several points of view the details contained in the Excel file.
-As a result, we managed to create some plots with information referring to:
-* number of missing values from a column
-* number of tests done per institution
+As a result, we managed to create some summaries and plots with information
+referring to:
+* number of missing values from a column:
+
+    --> Column `INSTITUȚIA SURSĂ` has 11 missing values. \
+    --> Column `SEX` has 2 missing values. \
+    --> Column `VÂRSTĂ` has 208 missing values. \
+    --> Column `DATĂ DEBUT SIMPTOME DECLARATE` has 4434 missing values. \
+    --> Column `SIMPTOME DECLARATE` has 5004 missing values. \
+    --> Column `DATĂ INTERNARE` has 5021 missing values. \
+    --> Column `SIMPTOME RAPORTATE LA INTERNARE` has 5044 missing values. \
+    --> Column `DIAGNOSTIC ȘI SEMNE DE INTERNARE` has 5067 missing values.\
+    --> Column `ISTORIC DE CĂLĂTORIE` has 5130 missing values. \
+    --> Column `MIJLOACE DE TRANSPORT FOLOSITE` has 5439 missing values. \
+    --> Column `CONFIRMARE CONTACT CU O PERSOANĂ INFECTATĂ` has 5125 missing values. \
+    --> Column `DATA REZULTAT TESTARE` has 13 missing values. \
+    --> Column `REZULTAT TESTARE` has 482 missing values.
+
+* number of tests done per institution:
 
 ![Tests done per institution](/doc/Tests_done_per_institution.png)
-* number of people tested for COVID-19 and their test result
+* number of people tested for COVID-19 and their test result:
 
 ![Test results](/doc/Test_results.png)
-* the number of women and men tested
+
+* test results according to age:
+
+![Test results according to age](/doc/Test_results_according_to_age.png)
+
+* the number of women and men tested:
 
 ![Gender distribution](/doc/Gender_distribution.png)
-* the number of people that used transportation
+* the number of people that used transportation:
 
 ![Transportation used](/doc/Transportation_used.png)
-* the number of people who came in contact with an infected person
+* the number of people who came in contact with an infected person:
 
 ![Contacted someone infected](/doc/Contacted_someone_infected.png)
 
@@ -144,3 +165,20 @@ whose predictions are 100% correct has an AUC of 1.0.
 In our case, the values obtained for AUC are:
  * training stage: `0.502792596040242`
  * testing stage: `0.514461557118603`
+ 
+ ## Resources
+* [Natural Language Processing (NLP) with Python — Tutorial](https://medium.com/towards-artificial-intelligence/natural-language-processing-nlp-with-python-tutorial-for-beginners-1f54e610a1a0).
+* [Pythonic Data Cleaning With Pandas and NumPy](https://realpython.com/python-data-cleaning-numpy-pandas/)
+* [Data Cleaning with Python and Pandas: Detecting Missing Values](https://towardsdatascience.com/data-cleaning-with-python-and-pandas-detecting-missing-values-3e9c6ebcf78b)
+* [Practical Guide to Data Cleaning in Python](https://towardsdatascience.com/practical-guide-to-data-cleaning-in-python-f5334320e8e)
+* [Classification: ROC Curve and AUC](https://developers.google.com/machine-learning/crash-course/classification/roc-and-auc)
+* [Accuracy Performance Measures in Data Science: Confusion Matrix](https://towardsdatascience.com/accuracy-performance-measures-in-data-science-confidence-matrix-8559381b8b29)
+* [Performance Metrics: Confusion matrix, Precision, Recall, and F1 Score](https://towardsdatascience.com/performance-metrics-confusion-matrix-precision-recall-and-f1-score-a8fe076a2262)
+* [A machine learning model to identify early stage symptoms of SARS-Cov-2 infected patients](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7305929/)
+* [Build your first Machine Learning Model using TensorFlow](https://towardsdatascience.com/build-your-first-machine-learning-model-using-tensorflow-d61b9b2b7d5e)
+* [Build, Train, and Deploy Your First Neural Network with TensorFlow](https://www.pluralsight.com/courses/build-train-deploy-first-neural-network-tensorflow)
+* [Introduction to Machine Learning](https://developers.google.com/machine-learning/crash-course/ml-intro)
+* [Hello World - Machine Learning Recipes #1](https://www.youtube.com/watch?v=cKxRvEZd3Mw&list=PLOU2XLYxmsIIuiBfYad6rFYQU_jL2ryal&ab_channel=GoogleDevelopers)
+* [Supervised Learning: Crash Course AI #2](https://www.youtube.com/watch?v=4qVRBYAdLAo&ab_channel=CrashCourse)
+* [The Art and Science of ML](https://www.pluralsight.com/courses/art-science-ml-update)
+* [How to Perform Quality Assurance and Testing for ML Projects?](https://www.nexsoftsys.com/articles/how-to-perform-quality-assurance-and-testing-for-ml-projects.html)
