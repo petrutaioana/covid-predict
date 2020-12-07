@@ -144,11 +144,15 @@ def clean_symptoms_columns(df):
                                                                                                             c.ASIMPTOMATIC_VALUE)
 
     # Remove all number values.
-    df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME].str.replace(r'\d+\,\d+', '')
-    df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME].str.replace(r'\d+\.\d+', '')
+    df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME].str.replace(r'\d+\,\d+',
+                                                                                                            '')
+    df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME].str.replace(r'\d+\.\d+',
+                                                                                                            '')
 
-    df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME].str.replace(r'\d+\,\d+', '')
-    df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME].str.replace(r'\d+\.\d+', '')
+    df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME].str.replace(r'\d+\,\d+',
+                                                                                                            '')
+    df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME].str.replace(r'\d+\.\d+',
+                                                                                                            '')
 
     # Split the symptoms string by comma and remove heading white spaces.
     df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME] = df[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME].astype(str).apply(
@@ -159,3 +163,31 @@ def clean_symptoms_columns(df):
 
 def clean_results_column(df):
     df[c.LABEL_COLUMN_NAME] = df[c.LABEL_COLUMN_NAME].replace(['NEGATIB'], 'NEGATIV')
+
+
+def clean_contact_with_infected_person_column(df):
+    i = 0
+    no = ["nu", "neaga", "-", "fara", "0"]
+    yes = ["da", "covid", "posibil", "focar", "pozitiv"]
+
+    for elem in df['confirmare contact cu o persoană infectată']:
+        if any(i in str(elem).lower() for i in no):
+            df.loc[i, 'confirmare contact cu o persoană infectată'] = "nu"
+        elif any(i in str(elem).lower() for i in yes):
+            df.loc[i, 'confirmare contact cu o persoană infectată'] = "da"
+        i += 1
+    return df
+
+
+def clean_transport_used_column(df):
+    i = 0
+    no = ["nu", "neaga", "-", "fara", "0", "O"]
+    yes = ["da", "masina", "tren", "autocar", "avion", "ambulanta"]
+
+    for elem in df['mijloace de transport folosite']:
+        if any(i in str(elem).lower() for i in no):
+            df.loc[i, 'mijloace de transport folosite'] = "nu"
+        elif any(i in str(elem).lower() for i in yes):
+            df.loc[i, 'mijloace de transport folosite'] = "da"
+        i += 1
+    return df
