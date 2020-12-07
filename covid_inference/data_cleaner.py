@@ -74,7 +74,7 @@ def clean_features_training(df):
     clean_symptoms_columns(df)
 
     # Save to a new file.
-    df.to_excel("./data/data_set_training.xlsx")
+    df.to_excel("../data/data_set_training.xlsx")
 
     return df
 
