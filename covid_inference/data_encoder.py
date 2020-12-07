@@ -20,6 +20,7 @@ import data_processor
 #     #integer_encoded = integer_encoded.reshape(len(integer_encoded), 1)
 
 
+
 #     onehot_encoded = onehot_encoder.fit_transform(values)
 #     print(onehot_encoded)
 #     # invert
@@ -35,13 +36,41 @@ import data_processor
 
 #     return DataSet(onehot_encoded, onehot_encoded2)
 
+
 def encode(dataset):
     features = dataset.getFeatures()
     results = dataset.getResults()
 
     le = LabelEncoder()
 
-    encoded_features = features.apply(lambda col: le.fit_transform(col.astype(str)), axis=0, result_type='expand')
-    encoded_results = results.apply(lambda col: le.fit_transform(col.astype(str)), axis=0, result_type='expand')
+    encodedFeatures = features.apply(lambda col: le.fit_transform(col.astype(str)), axis=0, result_type='expand')
+    encodedResults = results.apply(lambda col: le.fit_transform(col.astype(str)), axis=0, result_type='expand')
 
-    return data_processor.DataSet(encoded_features, encoded_results)
+    return data_processor.DataSet(encodedFeatures, encodedResults)
+
+
+def clean_symptoms_column(data_frame):
+    i = 0
+    asymptomatic = ["asimptomatica", "asimptomatic", "asimptomatică", "asimptomatic covid", "nu", "nu are", "-", ""]
+    fever = ["febra", "subfebra", "subfebrilitati"]
+    cough = ["tuse", "tuse seaca"]
+    tiredness = ["fatigabilitate"]
+    muscular_pain = ["dureri musculare", "dureri abdominale", "durere", "durere locala"]
+    shortness_of_breath = ["dispnee", "dispnee marcata"]
+
+    for elem in data_frame['simptome delcarate']:
+        if any(i in str(elem).lower() for i in asymptomatic):
+            data_frame.loc[i, 'simptome delcarate'] = "asymptomatic"
+        elif any(i in str(elem).lower() for i in fever):
+            data_frame.loc[i, 'simptome delcarate'] = "fever"
+        elif any(i in str(elem).lower() for i in cough):
+            data_frame.loc[i, 'simptome delcarate'] = "cough"
+        elif any(i in str(elem).lower() for i in tiredness):
+            data_frame.loc[i, 'simptome delcarate'] = "tiredness"
+        elif any(i in str(elem).lower() for i in muscular_pain):
+            data_frame.loc[i, 'simptome delcarate'] = "muscular_pain"
+        elif any(i in str(elem).lower() for i in shortness_of_breath):
+            data_frame.loc[i, 'simptome delcarate'] = "shortness_of_breath"
+        i += 1
+    return data_frame
+    return data_frame
