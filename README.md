@@ -21,30 +21,43 @@ following elements: accuracy, precision, recall, F1 score, confusion matrix and 
 ### Accuracy
 Accuracy represents the rate of our model being correct, by calculating the sum
 of True Positive (TP) and True Negative (TN) values and then dividing by total
-number of individuals.
+number of individuals.\
+In our case, the value obtained for accuracy is `0.8539325842696629`.
 ### Precision
 Precision is the rate of values that measures the accuracy of positive predictions.
 This information can be obtained after dividing True Positives (TP) by total
 number of positive people. Precision value lies between 0 and 1 and indicates
 what percentage is truly positive out of all the positive predicted.
 * Precision = TP / (TP + FP)
+
+The accuracy resulting from the measurement is identical to the accuracy,
+more precisely `0.8539325842696629`.
+
 ### Recall
 Recall represents the rate of values that measures positive instances that were
 correctly identified by our model. It is also called sensitivity, or the true
 positive rate. In other words, this notion informs us about what percentage of
 individuals are predicted positive out of the total number of positives.
 * Recall = TP / (TP + FN)
+
+For our model, recall value is `0.0`.
+
 ### F1 score
 Represents the harmonic mean of precision and recall. It takes both false positive
 and false negatives into account. Therefore, it performs well on an imbalanced
 data set.
 * F1 score = 2 / (1 / Precision + 1 / Recall)
+
+For our model, F1 score is also `0.0`.
+
 ### Confusion matrix
 This notion refers to a matrix of size 2x2 for classifying individuals in the data
 set, more precisely actual values are located on one axis and predicted ones on
 another. Therefore, the 4 terms that make up this matrix refer to patients labeled
 as true positive (TP), true negative (TN), false positive (FP) and false negative
 (FN).
+
+![Confusion matrix](/doc/Confusion_matrix.png)
 
 * True Positive (TP): model correctly predicts the positive tested people.
 * True Negative (TN): model correctly predicts the negative tested people.
@@ -64,5 +77,11 @@ Negative Rate (FNR).
 Even if data is imbalanced, we can figure out that our model is working well or
 not. For that, the values of TPR and TNR should be high, whereas FPR and FNR should
 be as low as possible.
+
+The resulting confusion matrix for our model is `[[76,  0], [13,  0]]`, meaning
+that 76 people were classified as True Negatives (TN), 0 False Negatives (FN),
+13 False Positives (FP) and 0 True Positives (TP).
+
 ### AUC (Area Under the Curse)
 The more it is closer to 1, the better the classification has been performed.
+In our case, AUC value is `0.5`.
