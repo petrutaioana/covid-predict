@@ -13,6 +13,27 @@ To check the code against good coding style practices, from the project's root f
 pycodestyle covid_inference
 ```
 
+## Statistics
+To be able to perform a proper cleaning of the data set received as input, we have
+analyzed from several points of view the details contained in the Excel file.
+As a result, we managed to create some plots with information referring to:
+* number of missing values from a column
+* number of tests done per institution
+
+![Tests done per institution](/doc/Tests_done_per_institution.png)
+* number of people tested for COVID-19 and their test result
+
+![Test results](/doc/Test_results.png)
+* the number of women and men tested
+
+![Gender distribution](/doc/Gender_distribution.png)
+* the number of people that used transportation
+
+![Transportation used](/doc/Transportation_used.png)
+* the number of people who came in contact with an infected person
+
+![Contacted someone infected](/doc/Contacted_someone_infected.png)
+
 ## Performance Metrics
 Performance metrics measurements are decisive when dealing with imbalanced data sets, to form an idea of the
 effectiveness of the algorithm implemented to detect patients suspected of COVID. Therefore, we analyzed the
@@ -109,7 +130,7 @@ An ROC (Receiver Operating Characteristic) curve is a graph showing the performa
 of a classification model at all classification thresholds.
  
 This curve plots two parameters, True Positive Rate (TPR) and False Positive Rate
-(FPR).
+(FPR):
 
 ![AUC](/doc/AUC.svg)
 
