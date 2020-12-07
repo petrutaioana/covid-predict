@@ -22,7 +22,9 @@ following elements: accuracy, precision, recall, F1 score, confusion matrix and 
 Accuracy represents the rate of our model being correct, by calculating the sum
 of True Positive (TP) and True Negative (TN) values and then dividing by total
 number of individuals.\
-In our case, the value obtained for accuracy is `0.8539325842696629`.
+In our case, the values obtained for accuracy are:
+ * training stage: `0.8982758620689655`
+ * testing stage: `0.9100775193798449`
 ### Precision
 Precision is the rate of values that measures the accuracy of positive predictions.
 This information can be obtained after dividing True Positives (TP) by total
@@ -30,9 +32,10 @@ number of positive people. Precision value lies between 0 and 1 and indicates
 what percentage is truly positive out of all the positive predicted.
 * Precision = TP / (TP + FP)
 
-The accuracy resulting from the measurement is identical to the accuracy,
-more precisely `0.8539325842696629`.
-
+In our case, the values obtained for precision are:
+ * training stage: `0.5170454545454546`
+ * testing stage: `0.6244131455399061`
+ 
 ### Recall
 Recall represents the rate of values that measures positive instances that were
 correctly identified by our model. It is also called sensitivity, or the true
@@ -40,7 +43,9 @@ positive rate. In other words, this notion informs us about what percentage of
 individuals are predicted positive out of the total number of positives.
 * Recall = TP / (TP + FN)
 
-For our model, recall value is `0.0`.
+In our case, the values obtained for recall are:
+ * training stage: `0.5027925960402421`
+ * testing stage: `0.514461557118603`
 
 ### F1 score
 Represents the harmonic mean of precision and recall. It takes both false positive
@@ -48,7 +53,9 @@ and false negatives into account. Therefore, it performs well on an imbalanced
 data set.
 * F1 score = 2 / (1 / Precision + 1 / Recall)
 
-For our model, F1 score is also `0.0`.
+In our case, the F1 scores obtained are:
+ * training stage: `0.4895508584555259`
+ * testing stage: `0.508642429336976`
 
 ### Confusion matrix
 This notion refers to a matrix of size 2x2 for classifying individuals in the data
@@ -78,10 +85,41 @@ Even if data is imbalanced, we can figure out that our model is working well or
 not. For that, the values of TPR and TNR should be high, whereas FPR and FNR should
 be as low as possible.
 
-The resulting confusion matrix for our model is `[[76,  0], [13,  0]]`, meaning
-that 76 people were classified as True Negatives (TN), 0 False Negatives (FN),
-13 False Positives (FP) and 0 True Positives (TP).
+The resulting confusion matrices for our model are:
+ * training stage: `[[520,   7], [ 52,   1]]` --> 520 people were classified as 
+True Negatives (TN), 52 False Negatives (FN), 7 False Positives (FP) and 1
+True Positive (TP)
 
-### AUC (Area Under the Curse)
-The more it is closer to 1, the better the classification has been performed.
-In our case, AUC value is `0.5`.
+    TPR = `0.0188679245283019`\
+    FNR = `0.9811320754716981`\
+    TNR = `0.9867172675521822`\
+    FPR = `0.0132827324478178`
+ 
+ * testing stage: `[[585,   4], [ 54,   2]]` --> 585 people were classified as 
+True Negatives (TN), 54 False Negatives (FN), 4 False Positives (FP) and 2
+True Positives (TP)
+
+    TPR = `0.0357142857142857`\
+    FNR = `0.9642857142857143`\
+    TNR = `0.9932088285229202`\
+    FPR = `0.0067911714770798`
+
+### AUC (Area under the ROC Curve)
+An ROC (Receiver Operating Characteristic) curve is a graph showing the performance
+of a classification model at all classification thresholds.
+ 
+This curve plots two parameters, True Positive Rate (TPR) and False Positive Rate
+(FPR).
+
+![AUC](/doc/AUC.svg)
+
+AUC measures the entire two-dimensional area underneath the entire ROC curve
+from (0,0) to (1,1). The more it is closer to 1, the better the classification
+has been performed. One way of interpreting AUC is as the probability that
+model ranks a random positive example more highly than a random negative example.
+A model whose predictions are 100% wrong has an AUC of 0.0. Contrariwise, one 
+whose predictions are 100% correct has an AUC of 1.0.
+
+In our case, the values obtained for AUC are:
+ * training stage: `0.502792596040242`
+ * testing stage: `0.514461557118603`
