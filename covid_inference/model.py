@@ -43,10 +43,12 @@ def test(testing_ds):
     print("### TESTING RESULTS  ###")
     print(evaluation_testing)
 
+    
+def infer():
+    file = sys.argv[1]
 
-def infer(features):
-    pass
-
+    ds = data_processor.read_file(file)
+    test(ds)
 
 if __name__ == '__main__':
     main()
