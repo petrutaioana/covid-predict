@@ -109,7 +109,7 @@ An ROC (Receiver Operating Characteristic) curve is a graph showing the performa
 of a classification model at all classification thresholds.
  
 This curve plots two parameters, True Positive Rate (TPR) and False Positive Rate
-(FPR).
+(FPR):
 
 ![AUC](/doc/AUC.svg)
 
