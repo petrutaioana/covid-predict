@@ -73,9 +73,6 @@ def clean_features_training(df):
     df = df.dropna(subset=[c.FEATURE_SIMPTOME_DECLARATE_COLUMN_NAME, c.FEATURE_SIMPTOME_RAPORTATE_COLUMN_NAME])
     clean_symptoms_columns(df)
 
-    # Save to a new file.
-    df.to_excel("../data/data_set_training.xlsx")
-
     return df
 
 

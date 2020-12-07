@@ -7,7 +7,7 @@ import model_evaluator
 
 
 def main():
-    file = sys.argv[1]
+    file = sys.argv[2]
 
     ds = data_processor.read_file(file)
 
@@ -27,10 +27,10 @@ def train(training_ds, validation_ds):
     inference = model_trainer.train_and_predict(training_ds, validation_ds, 2)
 
     evaluation = model_evaluator.evaluate(inference, validation_ds.getResults())
+    
     print("### TRAINING & VALIDATION  RESULTS  ###")
-    # print(validation_ds.getResults())
-    # print(inference)
     print(evaluation)
+    print()
 
 
 def test(testing_ds):
@@ -40,15 +40,21 @@ def test(testing_ds):
     inference_testing = model_trainer.test_predict(testing_ds)
 
     evaluation_testing = model_evaluator.evaluate(inference_testing, testing_ds.getResults())
+    
     print("### TESTING RESULTS  ###")
     print(evaluation_testing)
 
     
 def infer():
-    file = sys.argv[1]
+    file = sys.argv[2]
 
     ds = data_processor.read_file(file)
     test(ds)
 
 if __name__ == '__main__':
-    main()
+    method = sys.argv[1]
+
+    if method == 'train':
+        main()
+    elif method == 'infer':
+        infer()
