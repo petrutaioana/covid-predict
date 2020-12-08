@@ -4,10 +4,11 @@ import improved_data_cleaner
 import data_encoder
 import model_trainer
 import model_evaluator
+import constants
 
 
 def main():
-    file = sys.argv[2]
+    file = sys.argv[1]
 
     ds = data_processor.read_file(file)
 
@@ -15,6 +16,7 @@ def main():
 
     train(training_ds, validation_ds)
     test(testing_ds)
+    infer()
 
 
 def train(training_ds, validation_ds):
@@ -43,19 +45,20 @@ def test(testing_ds):
 
     print("### TESTING RESULTS  ###")
     print(evaluation_testing)
+    print()
 
 
 def infer():
     file = sys.argv[2]
 
     ds = data_processor.read_file(file)
-    test(ds)
 
+    results = ds[constants.LABEL_COLUMN_NAME]
+    features = ds.drop(constants.LABEL_COLUMN_NAME, axis='columns')
+
+    dataset = data_processor.DataSet(features, results)
+
+    test(dataset)
 
 if __name__ == '__main__':
-    method = sys.argv[1]
-
-    if method == 'train':
-        main()
-    elif method == 'infer':
-        infer()
+    main()
